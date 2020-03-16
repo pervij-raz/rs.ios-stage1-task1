@@ -10,37 +10,42 @@
         [arrayFromString addObject:[NSString stringWithFormat:@"%C", [string characterAtIndex:i]]];
     }
     
-        NSMutableArray *resultString = [NSMutableArray array];
+    NSMutableArray *resultString = [NSMutableArray array];
     
     for (int key = 0; key < arrayFromString.count; key++) {
         if ([arrayFromString[key]  isEqual: @"["]) {
             NSArray *partOfArray = [arrayFromString subarrayWithRange:NSMakeRange(key, arrayFromString.count - key)];
-             for (int index = 0; index < partOfArray.count; index++) {
-                 if ([partOfArray[index]  isEqual: @"]"]) {
-                        if (key + 1 < index + key) {
+            for (int index = 0; index < partOfArray.count; index++) {
+                if ([partOfArray[index]  isEqual: @"]"]) {
+                    if (key + 1 < index + key) {
                         NSArray *arrayFromSubstring = [arrayFromString subarrayWithRange:NSMakeRange(key + 1, index - 1)];
-                            [resultString addObject: [arrayFromSubstring componentsJoinedByString:@""]];
-                        }}
-                }
+                        [resultString addObject: [arrayFromSubstring componentsJoinedByString:@""]];
+                    }}
+            }
         } else if ([arrayFromString[key]  isEqual: @"("]) {
-                NSArray *partOfArray = [arrayFromString subarrayWithRange:NSMakeRange(key, arrayFromString.count - key)];
-               for (int index = 0; index < partOfArray.count; index++) {
-                    if ([partOfArray[index]  isEqual: @")"]) {
-                        if (key + 1 < index + key) {
+            NSArray *partOfArray = [arrayFromString subarrayWithRange:NSMakeRange(key, arrayFromString.count - key)];
+            for (int index = 0; index < partOfArray.count; index++) {
+                if ([partOfArray[index]  isEqual: @")"]) {
+                    
+                    if (key + 1 < index + key) {
                         NSArray *arrayFromSubstring = [arrayFromString subarrayWithRange:NSMakeRange(key + 1, index - 1)];
-                        [resultString addObject: [arrayFromSubstring componentsJoinedByString:@""]];
-                    }
+                        if ([arrayFromSubstring containsObject: (@"(")]) {
+                            break;
+                        } else {
+                            [resultString addObject: [arrayFromSubstring componentsJoinedByString:@""]];
+                        }
                     }
                 }
+            }
         } else if ([arrayFromString[key]  isEqual: @"<"]) {
-                NSArray *partOfArray = [arrayFromString subarrayWithRange:NSMakeRange(key, arrayFromString.count - key)];
-                for (int index = 0; index < partOfArray.count; index++) {
-                    if ([partOfArray[index]  isEqual: @">"]) {
-                        if (key + 1 < index + key) {
+            NSArray *partOfArray = [arrayFromString subarrayWithRange:NSMakeRange(key, arrayFromString.count - key)];
+            for (int index = 0; index < partOfArray.count; index++) {
+                if ([partOfArray[index]  isEqual: @">"]) {
+                    if (key + 1 < index + key) {
                         NSArray *arrayFromSubstring = [arrayFromString subarrayWithRange:NSMakeRange(key + 1, index - 1)];
                         [resultString addObject: [arrayFromSubstring componentsJoinedByString:@""]];
-                        }}
-                }
+                    }}
+            }
         }
     }
     return resultString;
